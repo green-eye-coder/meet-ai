@@ -6,6 +6,13 @@ import { useState } from 'react';
 import {Input} from '@/components/ui/input';
 import { authClient } from "@/lib/auth-client";
 
+/**
+ * Renders the main authentication page with sign-up and login forms, or a welcome message for authenticated users.
+ *
+ * Displays sign-up and login forms for unauthenticated users, allowing them to create an account or log in using email and password. If a user session exists, shows a personalized welcome message and a sign-out button.
+ *
+ * @remark Alerts are shown for both success and error outcomes during sign-up and login.
+ */
 export default function Home() {
   const[name, setName] = useState('');
   const[email, setEmail] = useState('');
