@@ -51,7 +51,7 @@ export const SignUpView = () => {
   });
 
   // Handle form submission
-  const onSumit =  (data: z.infer<typeof signUpSchema>) => {
+  const onSubmit =  (data: z.infer<typeof signUpSchema>) => {
     setError(null); // Reset error state
     setPending(true); // Set pending state to true
     authClient.signUp.email(
@@ -83,7 +83,7 @@ export const SignUpView = () => {
           <CardContent className="grid p-0 md:grid-cols-2 xl:grid-cols-2">
             {/* Form component with react-hook-form integration */}
             <Form {...form}>
-              <form className="p-6 md:p-8 " onSubmit={form.handleSubmit(onSumit)}>
+              <form className="p-6 md:p-8 " onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-6">
                   {/* Header section */}
                   <div className="flex flex-col items-center text-center">
@@ -105,7 +105,7 @@ export const SignUpView = () => {
                           <FormControl>
                             <Input
                               type="text"
-                              placeholder="Ex: John Doe"
+                              placeholder="e.g., John Doe"
                               {...field}
                               className=" border-red-300 "
                             />
@@ -126,7 +126,7 @@ export const SignUpView = () => {
                           <FormControl>
                             <Input
                               type="email"
-                              placeholder="Ex: John@abc.com"
+                              placeholder="e.g., John@abc.com"
                               {...field}
                               className=" border-red-300 "
                             />

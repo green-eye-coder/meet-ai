@@ -49,7 +49,7 @@ export const SignInView = () => {
   });
 
   // Handle form submission
-  const onSumit = (data: z.infer<typeof signInSchema>) => {
+  const onSubmit = (data: z.infer<typeof signInSchema>) => {
     setError(null);
     setPending(true);
     authClient.signIn.email(
@@ -79,7 +79,7 @@ export const SignInView = () => {
           <CardContent className="grid p-0 md:grid-cols-2 xl:grid-cols-2">
             {/* Sign-in form */}
             <Form {...form}>
-              <form className="p-6 md:p-8 " onSubmit={form.handleSubmit(onSumit)}>
+              <form className="p-6 md:p-8 " onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-6">
                   {/* Welcome message */}
                   <div className="flex flex-col items-center text-center">
