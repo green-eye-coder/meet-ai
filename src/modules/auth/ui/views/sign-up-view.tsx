@@ -119,7 +119,7 @@ export const SignUpView = () => {
                   <div className="flex flex-col gap-6">
                     {/* Header section */}
                     <div className="flex flex-col items-center text-center">
-                      <h1 className="text-l font-bold text-[#ff4d6d]">
+                      <h1 className="text-l font-bold text-primary">
                         Let's get you started
                       </h1>
                       <p className="text-sm  text-balance text-muted-foreground">
@@ -221,7 +221,8 @@ export const SignUpView = () => {
                     <Button
                       disabled={pending}
                       type="submit"
-                      className="w-full bg-[#ff4d6d] hover:bg-[#ff4d6d]/90 text-white"
+                      // className="w-full bg-[#ff4d6d] hover:bg-[#ff4d6d]/90 text-white"
+                      className="bg-primary w-full hover:bg-[#ff4d6d] mt-3 text-white"
                     >
                       Sign Up
                     </Button>
@@ -267,7 +268,7 @@ export const SignUpView = () => {
                   Already have an account ?{" "}
                   <Link
                     href="/sign-in"
-                    className="text-[#ff4d6d] hover:underline"
+                    className="text-primary hover:underline"
                   >
                     Sign In
                   </Link>
@@ -277,7 +278,7 @@ export const SignUpView = () => {
 
             {/* Right side: Logo and branding (hidden on small screens) */}
             <div className="relative hidden bg-gradient-to-r from-[#febdc9] via-[#fe899f] to-[#fe6f89]   md:flex flex-col gap-y-4 items-center justify-center">
-              <img src="/logo.svg" alt="Logo" className="h-[200px] w-[200px]" />
+              <img src="logo/logo.svg" alt="Logo" className="h-[200px] w-[200px]" />
               {/* <p className="text-2xl font-semibold  text-[#7b2cbf]">Meet AI</p> */}
             </div>
           </CardContent>

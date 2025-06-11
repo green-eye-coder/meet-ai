@@ -15,7 +15,7 @@ export const HomeView = () => {
     <div className="flex flex-col p-4 gap-y-4">
       <p className="text-2xl font-bold">Welcome {session.user.name}</p>
       <Button
-        variant={"destructive"}
+        className=" priary"
         onClick={async () => {
           await authClient.signOut();
           router.push("/sign-in");
