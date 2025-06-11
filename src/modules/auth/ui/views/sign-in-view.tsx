@@ -50,7 +50,7 @@ export const SignInView = () => {
   });
 
   // Handle form submission
-  const onSumit = (data: z.infer<typeof signInSchema>) => {
+  const onSubmit = (data: z.infer<typeof signInSchema>) => {
     setError(null);
     setPending(true);
     authClient.signIn.email(
@@ -111,7 +111,7 @@ export const SignInView = () => {
                 {/* off default behaviour of the form */}
                 <form
                   className="p-6 md:p-6 md:pb-4 "
-                  onSubmit={form.handleSubmit(onSumit)}
+                  onSubmit={form.handleSubmit(onSubmit)}
                 >
                   <div className="flex flex-col gap-6">
                     {/* Welcome message */}
@@ -178,7 +178,8 @@ export const SignInView = () => {
                       disabled={pending}
                       type="submit"
                       id="sign-in"
-                      className="w-full bg-[#ff4d6d] hover:bg-[#ff4d6d]/90 text-white"
+                      // className=" bg-[#ff4d6d] "
+                      className="bg-primary w-full hover:bg-[#ff4d6d] mt-3 text-white"
                     >
                       Sign In
                     </Button>
@@ -234,7 +235,7 @@ export const SignInView = () => {
 
             {/* Right side: Logo and branding (visible on md+ screens) */}
             <div className="relative hidden bg-gradient-to-r from-[#febdc9] via-[#fe899f] to-[#fe6f89]   md:flex flex-col gap-y-4 items-center justify-center">
-              <img src="/logo.svg" alt="Logo" className="h-[200px] w-[200px]" />
+              <img src="logo/logo.svg" alt="Logo" className="h-[200px] w-[200px]" />
               {/* <p className="text-2xl font-semibold  text-[#7b2cbf]">Meet AI</p> */}
             </div>
           </CardContent>
