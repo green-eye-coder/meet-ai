@@ -48,7 +48,7 @@ export const DashboardSidebar = () => {
       <SidebarHeader className="text-sidebar-accent-foreground ">
         <Link
           href="/"
-          className="flex item-center justify-content-center gap-2 px-6 pt-2"
+          className="flex item-center justify-content-center gap-3 px-6 pt-2"
         >
           <Image
             src="logo/logo_light.svg"

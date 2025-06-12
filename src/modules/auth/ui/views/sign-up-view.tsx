@@ -106,14 +106,14 @@ export const SignUpView = () => {
   return (
     <div>
       {/* Main card container for the sign-up form */}
-      <div className="flex flex-col gap-6 shadow-[0_20px_50px_rgba(255,200,221,_0.7)] w-full md:w-[500px] lg:w-[600px] xl:w-[700px] mx-auto my-10">
+      <div className="flex flex-col gap-6 shadow-[0_20px_50px_rgba(255,200,221,_0.7)] w-full md:w-[500px] lg:w-[600px] xl:w-[700px] mx-auto my-10  rounded-lg">
         <Card className="overflow-hidden  p-0">
           <CardContent className="grid p-0 md:grid-cols-2 xl:grid-cols-2">
             {/* Form component with react-hook-form integration */}
-            <div className="">
+            <div>
               <Form {...form}>
                 <form
-                  className="pb-3 md:p-8 md:pb-3 "
+                  className="p-6 md:p-6 md:pb-4 "
                   onSubmit={form.handleSubmit(onSumit)}
                 >
                   <div className="flex flex-col gap-6">
