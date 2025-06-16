@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
-
+import {nanoid} from "nanoid";
 // This file defines the schema for the authentication tables used by BetterAuth with Drizzle ORM.
 /**
  * user
@@ -57,4 +57,16 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp('expires_at').notNull(),
   createdAt: timestamp('created_at').$defaultFn(() => /* @__PURE__ */ new Date()),
   updatedAt: timestamp('updated_at').$defaultFn(() => /* @__PURE__ */ new Date())
+});
+
+
+// ageny table
+
+export const agents=pgTable("agent", {
+  id:text("id").primaryKey().$defaultFn(() => nanoid()),
+  name: text("name").notNull(),
+  userId:text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  instructions: text("instructions").notNull(),
+  creaatedAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

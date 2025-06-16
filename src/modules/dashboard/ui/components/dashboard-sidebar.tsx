@@ -19,6 +19,8 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { DashboardUserButton } from "./dashboard-user-button";
+import React from "react";
+import Router from "next/router";
 
 const firstSection = [
   {
@@ -67,21 +69,25 @@ export const DashboardSidebar = () => {
             <SidebarMenu>
               {firstSection.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    className={cn(
-                      "h-11 hover:bg-linear-to-r/oklch border-transparent transition  ease-linear  hover:border-[#9e2a2b]/10 from-sidebar-accent/30 from-5% via-50% via-sidebar/30 to-sidebar/50",
-                      pathName===item.href && "bg-linear-to-r/oklch border-[#9e2a2b]/10 from-sidebar-accent from-5% via-55% via-sidebar/30  to-sidebar/70",
-                    )}
-                    isActive={pathName === item.href}
-                  >
-                    <Link
-                      href={item.href}
-                      className="flex items-center gap-2 font-semibold "
+                  <Link href={item.href} className="block">
+                    <SidebarMenuButton
+                      className={cn(
+                        "h-11 hover:bg-linear-to-r/oklch border-transparent transition ease-linear hover:border-[#9e2a2b]/10 from-sidebar-accent/30 from-5% via-50% via-sidebar/30 to-sidebar/50",
+                        pathName === item.href &&
+                          "bg-linear-to-r/oklch border-[#9e2a2b]/10 from-sidebar-accent from-5% via-55% via-sidebar/30 to-sidebar/70"
+                      )}
+                      isActive={pathName === item.href}
                     >
-                      {item.icon && <item.icon className="size-5 font-bold" />}
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                      <div className="flex items-center gap-2 font-semibold">
+                        {item.icon && (
+                          <item.icon className="size-5 font-bold" />
+                        )}
+                        <span className="text-sm font-medium">
+                          {item.label}
+                        </span>
+                      </div>
+                    </SidebarMenuButton>
+                  </Link>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -89,27 +95,31 @@ export const DashboardSidebar = () => {
         </SidebarGroup>
         <div className="px-4 py-2">
           <Separator className="opacity-50 text-[#8a6f6f]/30" />
-          </div>
+        </div>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {secondSection.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    className={cn(
-                      "h-11 hover:bg-linear-to-r/oklch border-transparent transition  ease-linear  hover:border-[#9e2a2b]/10 from-sidebar-accent/30 from-5% via-50% via-sidebar/30 to-sidebar/50",
-                      pathName===item.href && "bg-linear-to-r/oklch border-[#9e2a2b]/10 from-sidebar-accent from-5% via-55% via-sidebar/30  to-sidebar/70",
-                    )}
-                    isActive={pathName === item.href}
-                  >
-                    <Link
-                      href={item.href}
-                      className="flex items-center gap-2 font-semibold "
+                  <Link href={item.href} className="block">
+                    <SidebarMenuButton
+                      className={cn(
+                        "h-11 hover:bg-linear-to-r/oklch border-transparent transition ease-linear hover:border-[#9e2a2b]/10 from-sidebar-accent/30 from-5% via-50% via-sidebar/30 to-sidebar/50",
+                        pathName === item.href &&
+                          "bg-linear-to-r/oklch border-[#9e2a2b]/10 from-sidebar-accent from-5% via-55% via-sidebar/30 to-sidebar/70"
+                      )}
+                      isActive={pathName === item.href}
                     >
-                      {item.icon && <item.icon className="size-5 font-bold" />}
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                      <div className="flex items-center gap-2 font-semibold">
+                        {item.icon && (
+                          <item.icon className="size-5 font-bold" />
+                        )}
+                        <span className="text-sm font-medium">
+                          {item.label}
+                        </span>
+                      </div>
+                    </SidebarMenuButton>
+                  </Link>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

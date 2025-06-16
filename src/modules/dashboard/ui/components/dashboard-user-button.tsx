@@ -24,8 +24,6 @@ import {
   ChevronUp,
   CreditCard,
   LogOutIcon,
-  LucideSettings,
-  SettingsIcon,
   UserCog,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
