@@ -1,4 +1,4 @@
-import { CommandDialog, CommandInput, CommandList, CommandItem } from "@/components/ui/command";
+import { CommandResponsiveDialog, CommandInput, CommandList, CommandItem } from "@/components/ui/command";
 import { Dispatch, SetStateAction } from "react";
 
 // Define the props for the DashboardCommand component
@@ -11,7 +11,7 @@ interface Props {
 export const DashboardCommand = ({ open, setOpen }: Props) => {
     return (
         // CommandDialog is the main dialog component, controlled by 'open' prop
-        <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
             {/* Input field for searching meetings or agents */}
             <CommandInput
                 placeholder="Find a meeting or agents"
@@ -28,6 +28,6 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                     test 3
                 </CommandItem>
             </CommandList>
-        </CommandDialog>
+        </CommandResponsiveDialog>
     );
 }

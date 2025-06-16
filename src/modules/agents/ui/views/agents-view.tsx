@@ -2,6 +2,8 @@
 
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
+import { ResponsiveDialog } from "@/components/responsive-dialog";
+import { Button } from "@/components/ui/button";
 import {useTRPC} from "@/trpc/client"
 import { useSuspenseQuery }  from "@tanstack/react-query";
 
@@ -11,6 +13,9 @@ export const AgentsView = () => {
 
     return (
         <div>
+            <ResponsiveDialog title="dsk" description="skjnd" open={true} onOpenChange={()=>{}}>
+                <Button>kjs</Button>
+            </ResponsiveDialog>
         {JSON.stringify(data, null, 2)}
         </div>
     )
