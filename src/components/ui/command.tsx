@@ -77,7 +77,7 @@ function CommandResponsiveDialog({
 
   if (isMobile) {
     return (
-      <Drawer {...props}>
+      <Drawer {...props} >
         <DrawerContent className="overflow-hidden p-0">
           <DrawerHeader className="sr-only">
             <DrawerTitle>{title}</DrawerTitle>
@@ -94,7 +94,7 @@ function CommandResponsiveDialog({
   }
 
   return (
-    <Dialog {...props}>
+    <Dialog {...props} >
       <DialogHeader className="sr-only">
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>

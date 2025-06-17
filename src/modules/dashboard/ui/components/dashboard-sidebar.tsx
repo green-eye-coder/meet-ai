@@ -12,7 +12,7 @@ import {
   SidebarGroupContent,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
+import { BotIcon, StarIcon, VideoIcon,Crown  } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
@@ -37,7 +37,7 @@ const firstSection = [
 
 const secondSection = [
   {
-    icon: StarIcon,
+    icon: Crown ,
     label: "Upgrade",
     href: "/upgrade",
   },
