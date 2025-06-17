@@ -1,5 +1,5 @@
 import { createAvatar } from "@dicebear/core";
-import { adventurerNeutral, initials, glass } from "@dicebear/collection";
+import { adventurerNeutral, initials, glass,botttsNeutral  } from "@dicebear/collection";
 
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 interface GeneratedAvatarProps {
   seed: string;
   className?: string;
-  variant: "adventurerNeutral" | "initials" | "glass";
+  variant: "adventurerNeutral" | "initials" | "glass"| "botttsNeutral";
 }
 
 export const GeneratedAvatar = ({
@@ -26,7 +26,12 @@ export const GeneratedAvatar = ({
       fontWeight:500,
         fontSize: 42,
     });
-  } else {
+  }else if (variant === "botttsNeutral") {
+    avatar = createAvatar(botttsNeutral, {
+      seed,
+    });
+  }
+   else {
     avatar = createAvatar(glass, {
       seed,
     });
