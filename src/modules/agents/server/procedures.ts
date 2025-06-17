@@ -4,6 +4,7 @@ import {createTRPCRouter,baseProcedure, protectedProcedure} from "@/trpc/init";
 import{agentsInsertSchema} from "../schema"
 import z from "zod";
 import { eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 // import { TRPCError } from "@trpc/server";
 
 
@@ -14,6 +15,14 @@ export const agentsRouter = createTRPCRouter({
         .select()
         .from(agents)
         .where(eq(agents.id,input.id ));
+
+        if(!existingAgent){
+            throw new TRPCError({
+                code:"NOT_FOUND",
+                message:`Agent ${agents.id} not found`,
+            });
+            
+        }
         
         return existingAgent;
     }),
