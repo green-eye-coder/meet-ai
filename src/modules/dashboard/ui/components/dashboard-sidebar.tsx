@@ -46,7 +46,7 @@ const secondSection = [
 export const DashboardSidebar = () => {
   const pathName = usePathname();
   return (
-    <Sidebar>
+    <Sidebar className="">
       <SidebarHeader className="text-sidebar-accent-foreground ">
         <Link
           href="/"
