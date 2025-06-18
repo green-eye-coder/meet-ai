@@ -19,7 +19,7 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onRowClick?:(row:TData)=> void;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -36,7 +36,6 @@ export function DataTable<TData, TValue>({
   return (
     <div className="rounded-lg border bg-background overflow-hidden">
       <Table>
-        
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -44,7 +43,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 className="hover:cursor-pointer"
-                onClick={()=>onRowClick?.(row.original)}
+                onClick={() => onRowClick?.(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="text-sm p-4">
@@ -55,7 +54,10 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-10 text-center text-muted-foreground">
+              <TableCell
+                colSpan={columns.length}
+                className="h-10 text-center text-muted-foreground"
+              >
                 No Agent is Created
               </TableCell>
             </TableRow>
