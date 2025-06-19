@@ -52,11 +52,11 @@ export const AgentForm = ({
         trpc.agents.create.mutationOptions({
             onSuccess: async () => {
                 // Invalidate agent list cache after creation
-                await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
+                await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
                 if (initialValues?.id) {
                     // Invalidate specific agent cache if editing
-                    await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
-                    queryClient.invalidateQueries(
+                    // await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+                    await queryClient.invalidateQueries(
                         trpc.agents.getOne.queryOptions({ id: initialValues.id })
                     );
                 }
