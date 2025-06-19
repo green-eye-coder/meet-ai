@@ -13,7 +13,7 @@ import {Badge} from "@/components/ui/badge"
 export const columns: ColumnDef<AgentGetOne>[] = [
       {
     accessorKey: "name",
-    header: "Agent Name",
+    header: "Agents",
     cell: ({ row }) => (
       <div>
           <div className="flex flex-col  gap-y-1">
@@ -29,7 +29,7 @@ export const columns: ColumnDef<AgentGetOne>[] = [
           <div className="flex items-center gap-x-2">
             <CornerDownRightIcon className="size-3 text-muted-foreground"/>
             <span className="text-sm text-muted-foreground max-w-[200px] truncate capitalize">
-                {row.original.instructions}
+                {row.original.instructions} 
             </span>
           </div>
 
@@ -45,9 +45,7 @@ export const columns: ColumnDef<AgentGetOne>[] = [
         variant="outline"
         className="flex items-center gap-x-2 [&>svg]:size-4">
             <VideoIcon className="text-primary"/>
-            {/* {row.original.meetingCount} {row.original.meetingCount === 1 ? "Meeting" : "Meetings"}
-             */}
-             5 Meetings
+           {row.original.meetingCount || 0} {row.original.meetingCount>1 ? "Meetings" : "Meeting"}
         </Badge>
     )
   },
