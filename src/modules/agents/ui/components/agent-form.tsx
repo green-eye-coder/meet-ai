@@ -53,13 +53,7 @@ export const AgentForm = ({
             onSuccess: async () => {
                 // Invalidate agent list cache after creation
                 await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
-                if (initialValues?.id) {
-                    // Invalidate specific agent cache if editing
-                    // await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
-                    await queryClient.invalidateQueries(
-                        trpc.agents.getOne.queryOptions({ id: initialValues.id })
-                    );
-                }
+                // TODO: invalidate free tier feature
                 // Invoke success callback
                 onSuccess?.();
             },
@@ -71,6 +65,36 @@ export const AgentForm = ({
             },
         })
     );
+
+
+    // update the agent mutation
+
+    const updateAgent = useMutation(
+      trpc.agents.update.mutationOptions({
+        onSuccess: async () => {
+          // Invalidate agent list cache after creation
+          await queryClient.invalidateQueries(
+            trpc.agents.getMany.queryOptions({})
+          );
+          if (initialValues?.id) {
+            // Invalidate specific agent cache if editing
+            // await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+            await queryClient.invalidateQueries(
+              trpc.agents.getOne.queryOptions({ id: initialValues.id })
+            );
+          }
+          // Invoke success callback
+          onSuccess?.();
+        },
+        onError: (error) => {
+          // Show error toast on failure
+          toast.error(error.message || "Failed to create agent");
+
+          // todo: check if error is "FORBIDDEN" and redirect to "/upgrade"
+        },
+      })
+    );
+
 
     // Initialize form with Zod schema and default values
     const form = useForm<z.infer<typeof agentsInsertSchema>>({
@@ -84,7 +108,7 @@ export const AgentForm = ({
     // Determine if the form is in edit mode
     const isEdit = !!initialValues?.id;
     // Track mutation pending state
-    const isPending = createAgent.isPending;
+    const isPending = createAgent.isPending || updateAgent.isPending;
 
     /**
      * Handles form submission for both create and edit modes.
@@ -93,7 +117,10 @@ export const AgentForm = ({
     const onSubmit = (values: z.infer<typeof agentsInsertSchema>) => {
         if (isEdit) {
             // Handle edit logic here
-            console.log("Editing agent:", values);
+            updateAgent.mutate({
+                id: initialValues.id,
+                ...values,
+            });
             // You can call a mutation to update the agent
         } else {
             // Trigger agent creation mutation
