@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/empty-state";
 import { useAgentsFilters } from "../../hooks/use-agents-filters";
 import { DataPagination } from "../components/data-pagination";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 
 export const AgentsView = () => {
