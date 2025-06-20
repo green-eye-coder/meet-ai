@@ -16,14 +16,19 @@ export const agentsRouter = createTRPCRouter({
   // TODO: change 'getOne' to use 'protectedProcedure'
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ input,ctx }) => {
       const [existingAgent] = await db
         .select({
           meetingCount: sql<number>`5`,
           ...getTableColumns(agents),
         })
         .from(agents)
-        .where(eq(agents.id, input.id));
+        .where(
+          and(
+            eq(agents.id, input.id),
+            eq(agents.userId,ctx.auth.user.id),
+          )
+        );
 
       if (!existingAgent) {
         throw new TRPCError({
