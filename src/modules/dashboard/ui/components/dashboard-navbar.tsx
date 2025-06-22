@@ -9,8 +9,22 @@ import { useEffect, useState } from "react";
 export const DashboardNavbar = () => {
   const { state, toggleSidebar, isMobile } = useSidebar();
   const [commandOpen, setCommandOpen] = useState(false);
+  const [modifierKey, setModifierKey] = useState("Ctrl");
 
   useEffect(() => {
+    // Prefer userAgentData (modern) if available
+    if (typeof navigator !== "undefined") {
+      if ("userAgentData" in navigator) {
+        const uaData = (navigator as any).userAgentData;
+        if (uaData.platform?.toLowerCase().includes("mac")) {
+          setModifierKey("⌘");
+        }
+      } else if (navigator.userAgent.toLowerCase().includes("mac")) {
+        // Fallback to userAgent if userAgentData is not available
+        setModifierKey("⌘");
+      }
+    }
+
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -52,7 +66,8 @@ export const DashboardNavbar = () => {
           <span className="pl-1 text-sm text-muted-foreground">Search</span>
           <kbd className="ml-auto gap-1 text-xs inline-flex h-5 select-none items-center rounded border bg-muted px-1.5 font-monospace text-[10px] font-medium text-muted-foreground">
             <span className="text-xs">
-              {/Mac/i.test(navigator.platform) ? "⌘" : "Ctrl"} K
+              {/* {/Mac/i.test(navigator.platform) ? "⌘" : "Ctrl"} K */}
+              Ctrl K
             </span>
           </kbd>
         </Button>
