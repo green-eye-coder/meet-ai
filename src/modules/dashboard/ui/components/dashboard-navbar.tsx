@@ -40,10 +40,8 @@ export const DashboardNavbar = () => {
 
   return (
     <>
-      {" "}
       <DashboardCommand open={commandOpen} setOpen={setCommandOpen} />
       <nav className="flex px-4 gap-x-2 items-center py-3 border-b bg-background shadow-lg shadow-[#c9184a]/5">
-        {" "}
         <Button
           aria-label="Toggle sidebar"
           className="size-9"
@@ -65,10 +63,7 @@ export const DashboardNavbar = () => {
           <SearchIcon />
           <span className="pl-1 text-sm text-muted-foreground">Search</span>
           <kbd className="ml-auto gap-1 text-xs inline-flex h-5 select-none items-center rounded border bg-muted px-1.5 font-monospace text-[10px] font-medium text-muted-foreground">
-            <span className="text-xs">
-              {/* {/Mac/i.test(navigator.platform) ? "⌘" : "Ctrl"} K */}
-              Ctrl K
-            </span>
+            <span className="text-xs">{modifierKey} K</span>
           </kbd>
         </Button>
       </nav>

@@ -53,7 +53,7 @@ export const DashboardSidebar = () => {
           className="flex item-center justify-center gap-3 px-6 pt-2"
         >
           <Image
-            src="logo/logo_light.svg"
+            src="/logo/logo_light.svg"
             height={120}
             width={130}
             alt="logo"
