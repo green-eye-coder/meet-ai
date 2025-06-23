@@ -2,7 +2,6 @@ import { db } from "@/db";
 import { agents } from "@/db/schema";
 import {
   createTRPCRouter,
-  baseProcedure,
   protectedProcedure,
 } from "@/trpc/init";
 import { agentsInsertSchema,agentsUpdateSchema } from "../schema";
