@@ -1,5 +1,3 @@
-import { auth } from "@/lib/auth";
-import { MeetingsListHeader } from "@/modules/meetings/ui/components/meetings-list-header";
 import {
   MeetingsViewError,
   MeetingsViewLoading,
@@ -7,21 +5,37 @@ import {
 } from "@/modules/meetings/ui/views/meeting-view";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
+import { Suspense } from "react";
+import { MeetingsListHeader } from "@/modules/meetings/ui/components/meetings-list-header";
+import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import type { SearchParams } from "nuqs/server";
+import { loadSearchParams } from "@/modules/meetings/params";
 
-const Page = async() => {
-   const session = await auth.api.getSession({
-        headers: await headers(),
-      });
-    
-      if (!session) {
-        redirect("/sign-in");
-      }
+interface Props {
+  searchParams: SearchParams;
+}
+
+
+
+const Page = async ({ searchParams }: Props) => {
+  const filters = await loadSearchParams(searchParams);
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/sign-in");
+  }
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.meetings.getMany.queryOptions({}));
+
+  void queryClient.prefetchQuery(trpc.meetings.getMany.queryOptions({
+      ...filters,
+    }));
+    
   return (
     <>
       <MeetingsListHeader />
