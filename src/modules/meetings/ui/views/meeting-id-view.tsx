@@ -3,13 +3,21 @@
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { MeetingIdViewHeader } from "../components/meeting-id-view-header";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
 import { UpdateMeetingDialog } from "../components/update-meeting-dialog";
 import { useState } from "react";
+import { UpcomingState } from "../components/upcoming-state";
+import { ActiveState } from "../components/active-state";
+import { CancelledState } from "../components/cancelled-state";
+import { ProcessingState } from "../components/processing-state";
 
 interface Props {
   meetingId: string;
@@ -17,12 +25,12 @@ interface Props {
 
 export const MeetingIdView = ({ meetingId }: Props) => {
   const trpc = useTRPC();
-  const queryClient =useQueryClient();
-  const router=useRouter();
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
-  const [RemoveConfirmation,confirmRemove] = useConfirm(
+  const [RemoveConfirmation, confirmRemove] = useConfirm(
     "Are you sure ?",
-    "The following action will remove the meeting permanently. This action cannot be undone.",
+    "The following action will remove the meeting permanently. This action cannot be undone."
   );
   const [updateMeetingDialogOpen, setUpdateMeetingDialog] = useState(false);
 
@@ -31,36 +39,39 @@ export const MeetingIdView = ({ meetingId }: Props) => {
   );
 
   const removeMeeting = useMutation(
-    trpc.meetings.remove.mutationOptions(
-    {
-      onSuccess:  () => {
+    trpc.meetings.remove.mutationOptions({
+      onSuccess: () => {
         queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
         router.push("/meetings");
-        
       },
       onError: (error) => {
-        toast.error(error.message||"Failed to remove meeting");
+        toast.error(error.message || "Failed to remove meeting");
       },
-    }
-  ));
+    })
+  );
 
   const handleRemoveMeeting = async () => {
-    
     const confirmed = await confirmRemove();
     if (!confirmed) {
       return;
-  }
-  await removeMeeting.mutateAsync({ id: meetingId });
-  toast.success("Meeting removed successfully");
-}
+    }
+    await removeMeeting.mutateAsync({ id: meetingId });
+    toast.success("Meeting removed successfully");
+  };
+
+  const isActive = data.status === "active";
+  const isUpcoming = data.status === "upcoming";
+  const isCancelled = data.status === "cancelled";
+  const isCompleted = data.status === "completed";
+  const isProcessing = data.status === "processing";
 
   return (
     <>
-    <RemoveConfirmation/>
-    <UpdateMeetingDialog 
-      open={updateMeetingDialogOpen}
-      onOpenChange={setUpdateMeetingDialog}
-      initialValues={data}
+      <RemoveConfirmation />
+      <UpdateMeetingDialog
+        open={updateMeetingDialogOpen}
+        onOpenChange={setUpdateMeetingDialog}
+        initialValues={data}
       />
       <div className="flex-1 py-4 md:px-8 flex  flex-col gap-y-4">
         <MeetingIdViewHeader
@@ -70,7 +81,16 @@ export const MeetingIdView = ({ meetingId }: Props) => {
           onRemove={handleRemoveMeeting}
         />
         <h1 className="text-2xl font-bold">Meeting ID: {meetingId}</h1>
-        {JSON.stringify(data, null, 2)}
+        {isCancelled&& <CancelledState/>}
+        {isActive && (<ActiveState meetingId={meetingId}/>)}
+        {isUpcoming && (<UpcomingState
+          meetingId={meetingId}
+          onCancelMeeting={()=>{}}
+          isCancelling={false}
+        />)}
+        {isCompleted && <div>completed</div>}
+        {isProcessing && <ProcessingState/>}
+        
       </div>
     </>
   );
@@ -90,4 +110,3 @@ export const MeetingIdViewError = () => {
     />
   );
 };
- 
