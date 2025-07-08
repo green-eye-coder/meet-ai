@@ -88,7 +88,7 @@ export const meetingsRouter = createTRPCRouter({
         {
           id: existingAgent.id,
           name: existingAgent.name,
-          role: "admin",
+          role: "user",
           image: generateAvatarUri({
             seed: existingAgent.name,
             variant: "botttsNeutral",
