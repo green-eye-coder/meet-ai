@@ -1,14 +1,15 @@
 import { db } from "@/db";
 import { meetings, agents } from "@/db/schema";
+import { inngest } from "@/inngest/client";
 import { streamVideo } from "@/lib/stream-video";
 import {
-  // CallEndedEvent,
+  CallEndedEvent,
+  CallRecordingReadyEvent,
   // MessageNewEvent,
-  // CallTranscriptionReadyEvent,
-  // CallRecordingReadyEvent,
   // CallSessionParticipantJoinedEvent,
   CallSessionParticipantLeftEvent,
   CallSessionStartedEvent,
+  CallTranscriptionReadyEvent,
 } from "@stream-io/node-sdk";
 
 import { and, eq, not } from "drizzle-orm";
@@ -134,6 +135,61 @@ export async function POST(request: NextRequest) {
     // Ends the call for the meeting
     const call = streamVideo.video.call("default", meetingId);
     await call.end();
+  } else if (eventType === "call.session_ended") {
+    const event = payload as CallEndedEvent;
+    const meetingId = event.call.custom?.meetingId;
+
+    if (!meetingId) {
+      return NextResponse.json(
+        { error: "Missing meetingId in call ended event" },
+        { status: 400 }
+      );
+    }
+
+    // Updates the meeting status to "processing" and sets the end time
+    await db
+      .update(meetings)
+      .set({ status: "processing", endedAt: new Date() })
+      .where(and(eq(meetings.id, meetingId), eq(meetings.status, "active")));
+    // Looks up the meeting in the database
+  } else if (eventType === "call.transcription_ready") {
+    const event = payload as CallTranscriptionReadyEvent;
+    const meetingId = event.call_cid.split(":")[1];
+
+    const [updatedMeeting] = await db
+      .update(meetings)
+      .set({
+        transcriptUrl:event.call_transcription.url,
+      })
+      .where(eq(meetings.id,meetingId))
+      .returning();
+    
+    if(!updatedMeeting){
+      return NextResponse.json(
+        { error: "Meeting not found" },
+        { status: 404 }
+      );
+    }
+
+    await inngest.send({
+      name: "meetings/processing",
+      data: {
+        meetingId: updatedMeeting.id,
+        transcriptUrl: updatedMeeting.transcriptUrl,
+      },
+    });
+   
+  }else if(eventType==="call.recording_ready"){
+    const event=payload as CallRecordingReadyEvent;
+    const meetingId=event.call_cid.split(":")[1];
+
+    await db
+      .update(meetings)
+      .set({
+        recordingUrl: event.call_recording.url,
+      })
+      .where(eq(meetings.id, meetingId));
+
   }
 
   // Returns a generic success response
