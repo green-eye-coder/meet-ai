@@ -220,7 +220,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
 
-    if(userId!== existingAgent.id){
+    if (userId !== existingAgent.id) {
       const instructions = `
       You are an AI assistant helping the user revisit a recently completed meeting.
       Below is a summary of the meeting, generated from the transcript:
@@ -234,7 +234,9 @@ export async function POST(request: NextRequest) {
       The user may ask questions about the meeting, request clarifications, or ask for follow-up actions.
       Always base your responses on the meeting summary above.
       
-      You also have access to the recent conversation history between you and the user. Use the context of previous messages to provide relevant, coherent, and helpful responses. If the user's question refers to something discussed earlier, make sure to take that into account and maintain continuity in the conversation.
+      You also have access to the recent conversation history between you and the user. Use the context of previous messages to provide relevant,
+      coherent, and helpful responses. If the user's question refers to something discussed earlier, 
+      make sure to take that into account and maintain continuity in the conversation.
       
       If the summary does not contain enough information to answer a question, politely let the user know.
       
@@ -245,29 +247,28 @@ export async function POST(request: NextRequest) {
       await channel.watch();
 
       const previousMessages = channel.state.messages
-      .slice(-5)
-      .filter((msg)=>msg.text && msg.text.trim()!=="")
-      .map<ChatCompletionMessageParam>((message)=>({
-        role:message.user?.id===existingAgent.id?"assistant":"user",
-        content:message.text||"",
-      }));
+        .slice(-5)
+        .filter((msg) => msg.text && msg.text.trim() !== "")
+        .map<ChatCompletionMessageParam>((message) => ({
+          role: message.user?.id === existingAgent.id ? "assistant" : "user",
+          content: message.text || "",
+        }));
 
-      const GPTResponse=await openaiClient.chat.completions.create({
-        messages:[
-          {role:"system",content:instructions},
+      const GPTResponse = await openaiClient.chat.completions.create({
+        messages: [
+          { role: "system", content: instructions },
           ...previousMessages,
-          {role:"user",content:text},
+          { role: "user", content: text },
         ],
-        model:"gpt-4o",
+        model: "gpt-4o",
       });
 
-
-      const GPTResponseText=GPTResponse.choices[0].message.content;
+      const GPTResponseText = GPTResponse.choices[0].message.content;
 
       if (!GPTResponseText) {
         return NextResponse.json(
           { error: "No response from GPT" },
-          { status: 500 }
+          { status: 400 }
         );
       }
 
@@ -276,13 +277,13 @@ export async function POST(request: NextRequest) {
         variant: "botttsNeutral",
       });
 
-      await streamChat.upsertUser({
+       streamChat.upsertUser({
         id: existingAgent.id,
         name: existingAgent.name,
         image: avatarUrl,
       });
 
-      await channel.sendMessage({
+       channel.sendMessage({
         text: GPTResponseText,
         user: {
           id: existingAgent.id,
@@ -291,9 +292,7 @@ export async function POST(request: NextRequest) {
         },
       });
     }
-
   }
-
 
   // Returns a generic success response
   return NextResponse.json({ status: "ok" });
