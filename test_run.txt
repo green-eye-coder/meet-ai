@@ -1,0 +1,6 @@
+npm run dev
+
+ngrok http --url=star-supreme-ferret.ngrok-free.app 3000
+
+
+npx inngest-cli@latest dev
