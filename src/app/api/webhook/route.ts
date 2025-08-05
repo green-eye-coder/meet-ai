@@ -220,7 +220,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
 
-    if (userId !== existingAgent.id) {
+    if(userId!== existingAgent.id){
       const instructions = `
       You are an AI assistant helping the user revisit a recently completed meeting.
       Below is a summary of the meeting, generated from the transcript:
@@ -247,28 +247,29 @@ export async function POST(request: NextRequest) {
       await channel.watch();
 
       const previousMessages = channel.state.messages
-        .slice(-5)
-        .filter((msg) => msg.text && msg.text.trim() !== "")
-        .map<ChatCompletionMessageParam>((message) => ({
-          role: message.user?.id === existingAgent.id ? "assistant" : "user",
-          content: message.text || "",
-        }));
+      .slice(-5)
+      .filter((msg)=>msg.text && msg.text.trim()!=="")
+      .map<ChatCompletionMessageParam>((message)=>({
+        role:message.user?.id===existingAgent.id?"assistant":"user",
+        content:message.text||"",
+      }));
 
-      const GPTResponse = await openaiClient.chat.completions.create({
-        messages: [
-          { role: "system", content: instructions },
+      const GPTResponse=await openaiClient.chat.completions.create({
+        messages:[
+          {role:"system",content:instructions},
           ...previousMessages,
-          { role: "user", content: text },
+          {role:"user",content:text},
         ],
-        model: "gpt-4o",
+        model:"gpt-4o",
       });
 
-      const GPTResponseText = GPTResponse.choices[0].message.content;
+
+      const GPTResponseText=GPTResponse.choices[0].message.content;
 
       if (!GPTResponseText) {
         return NextResponse.json(
           { error: "No response from GPT" },
-          { status: 400 }
+          { status: 500 }
         );
       }
 
@@ -277,13 +278,13 @@ export async function POST(request: NextRequest) {
         variant: "botttsNeutral",
       });
 
-       streamChat.upsertUser({
+      await streamChat.upsertUser({
         id: existingAgent.id,
         name: existingAgent.name,
         image: avatarUrl,
       });
 
-       channel.sendMessage({
+      await channel.sendMessage({
         text: GPTResponseText,
         user: {
           id: existingAgent.id,
@@ -292,7 +293,9 @@ export async function POST(request: NextRequest) {
         },
       });
     }
+
   }
+
 
   // Returns a generic success response
   return NextResponse.json({ status: "ok" });
